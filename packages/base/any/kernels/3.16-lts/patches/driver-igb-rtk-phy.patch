@@ -1,0 +1,56 @@
+diff --git a/drivers/net/ethernet/intel/igb/e1000_82575.c b/drivers/net/ethernet/intel/igb/e1000_82575.c
+index e070d26..71b111e 100644
+--- a/drivers/net/ethernet/intel/igb/e1000_82575.c
++++ b/drivers/net/ethernet/intel/igb/e1000_82575.c
+@@ -318,6 +318,9 @@ static s32 e1000_init_phy_params_82575(struct e1000_hw *hw)
+ 	case BCM54616_E_PHY_ID:
+ 		phy->type = e1000_phy_bcm54616;
+ 		break;
++	case RTL8211FS_E_PHY_ID:
++		phy->type		= e1000_phy_rtl8211fs;
++		break;
+     case BCM50210S_E_PHY_ID:
+         break;
+ 	default:
+@@ -1639,6 +1642,9 @@ static s32 e1000_setup_copper_link_82575(struct e1000_hw *hw)
+ 		break;
+ 	case e1000_phy_bcm5461s:
+ 		break;
++	case e1000_phy_rtl8211fs:
++		ret_val = 0;
++		break;
+ 	default:
+ 		ret_val = -E1000_ERR_PHY;
+ 		break;
+@@ -3985,4 +3991,4 @@ static s32 e1000_set_phy_mode_external_50210(struct e1000_hw *hw, struct e1000_p
+     ret_val = e1000_get_phy_id_82575(hw);
+     
+     return ret_val;
+-}
+\ No newline at end of file
++}
+diff --git a/drivers/net/ethernet/intel/igb/e1000_defines.h b/drivers/net/ethernet/intel/igb/e1000_defines.h
+index 29d8933..1df4427 100644
+--- a/drivers/net/ethernet/intel/igb/e1000_defines.h
++++ b/drivers/net/ethernet/intel/igb/e1000_defines.h
+@@ -1188,6 +1188,8 @@
+ #define BCM5461S_PHY_ID     0x002060C0
+ #define M88_VENDOR          0x0141
+ #define BCM50210S_E_PHY_ID  0x600d8590
++#define RTL8211FS_E_PHY_ID	0x001CC910
++
+ 
+ /* M88E1000 Specific Registers */
+ #define M88E1000_PHY_SPEC_CTRL		0x10  /* PHY Specific Control Reg */
+diff --git a/drivers/net/ethernet/intel/igb/e1000_hw.h b/drivers/net/ethernet/intel/igb/e1000_hw.h
+index 109e2ed..a68c723 100644
+--- a/drivers/net/ethernet/intel/igb/e1000_hw.h
++++ b/drivers/net/ethernet/intel/igb/e1000_hw.h
+@@ -135,6 +135,7 @@ enum e1000_phy_type {
+ 	e1000_phy_i210,
+ 	e1000_phy_bcm54616,
+ 	e1000_phy_bcm5461s,
++        e1000_phy_rtl8211fs,
+ };
+ 
+ enum e1000_bus_type {
